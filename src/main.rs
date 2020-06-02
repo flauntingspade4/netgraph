@@ -46,19 +46,18 @@ fn main() -> Result<(), reqwest::Error> {
 
 struct LinkFinderFor {
 	limit: u64,
-	link: String,
 	graph: Graph,
 }
 
 impl LinkFinderFor {
 	fn new(limit: u64, link: String) -> Self {
 		let mut graph = Graph::new();
-		graph.add_node(String::from(link.clone()));
-		Self { limit, link, graph }
+		graph.add_node(String::from(link));
+		Self { limit, graph }
 	}
 	fn find(&mut self, previous_node: NodeIndex, enumeration: u64) {
 		if self.limit >= enumeration {
-			let request = reqwest::blocking::get(&self.link);
+			let request = reqwest::blocking::get(self.graph.node_weight(previous_node).unwrap());
 			match &request {
 				Ok(_) => {}
 				Err(e) => {
@@ -76,7 +75,7 @@ impl LinkFinderFor {
 			let links: Vec<_> = finder.links(&body).collect();
 			for link in links {
 				let link = link.as_str();
-				if link.contains("www") && !link.contains("gif") && !link.contains("dtd") {
+				if link.contains("www") && !link.contains("gif") && !link.contains("dtd") && !link.contains("svg") {
 					let new_node = self.graph.add_node(String::from(link));
 					self.graph.add_edge(previous_node, new_node, ());
 				}
