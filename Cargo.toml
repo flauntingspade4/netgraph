@@ -1,0 +1,14 @@
+[package]
+name = "netgraph"
+version = "0.1.0"
+authors = ["flauntingspade4 <48335751+flauntingspade4@users.noreply.github.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+petgraph = "0.5.0"
+reqwest = { version = "0.10.4", features = ["blocking"] }
+linkify = "0.4.0"
+clap = "2.33.1"
+simple-stopwatch = "0.1.4"
